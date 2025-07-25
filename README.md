@@ -70,7 +70,7 @@ Why do we need slow cells?
 Why do we need small and fast cells?
 --> Small and fast cells are used where quick signal propagation is required to meet timing constraints and improve the overall speed of the circuit.
 ```
-```
+
 Tclk > Tcq_a + Tcombi+ Tsetup_b 
 ​
 ```
