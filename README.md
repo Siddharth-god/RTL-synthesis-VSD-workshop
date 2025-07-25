@@ -70,23 +70,6 @@ Why do we need slow cells?
 Why do we need small and fast cells?
 --> Small and fast cells are used where quick signal propagation is required to meet timing constraints and improve the overall speed of the circuit.(We need fast cells to meet our setup)
 ```
-
-- Why Tclk > Tcq_a + Tcombi+ Tsetup_b ?
-​
-```
-Total Clock (Tclk): The clock period (time between two clock edges).
-
-Tcq_a: Clock-to-Q delay of flip-flop A (time taken for data to appear at output of FFA after clock edge).
-
-Tcombi: Delay of the combinational logic between FFA and FFB.
-
-Tsetup_b: Setup time of flip-flop B (time data must be stable before the next clock edge).
-
-Why we use this condition ? 
-
-For data to be captured correctly by FFB, the signal from FFA must travel through the combinational logic and arrive before the next clock edge minus the setup time of FFB.
-Thus, the clock period must be greater than the total delay: Otherwise, the data may not reach FFB in time, causing a setup violation.
-```
 What is setup time ? 
 ```
 Setup time means we have to give the supply before the clock changes to stabilize the input and also the circuit.
