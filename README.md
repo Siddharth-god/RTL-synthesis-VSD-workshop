@@ -15,7 +15,7 @@ cd sky130RTLDesignAndSynthesisWorkshop/verilog_files
 #### Step 2: Install iverilog and GTKwave Tools
 ![Alt Text](workshop_snaps/1.png)
 
-#### Step 3: Simulate the 2-to-4 Multiplexer
+#### Step 3: Simulate the 2-to-4 Multiplexer.
 
 Compile the design and testbench:
 ```bash
