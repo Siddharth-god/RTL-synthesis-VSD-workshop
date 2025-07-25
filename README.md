@@ -64,11 +64,11 @@ What is Library ? (.lib)
 ```
 ```
 Why do we need slow cells?
---> Slow cells are needed to intentionally delay signals so that data from one flip-flop (FFA) doesn’t reach the next flip-flop (FFB) too early, preventing data overlap or loss.
+--> Slow cells are needed to intentionally delay signals so that data from one flip-flop (FFA) doesn’t reach the next flip-flop (FFB) too early, preventing data overlap or loss.(We need slow cells to meet our delay/hold.)
 ```
 ```
 Why do we need small and fast cells?
---> Small and fast cells are used where quick signal propagation is required to meet timing constraints and improve the overall speed of the circuit.
+--> Small and fast cells are used where quick signal propagation is required to meet timing constraints and improve the overall speed of the circuit.(We need fast cells to meet our setup)
 ```
 
 - Why Tclk > Tcq_a + Tcombi+ Tsetup_b ?
@@ -92,6 +92,10 @@ What is setup time ?
 Setup time means we have to give the supply before the clock changes to stabilize the input and also the circuit.
 what is Tclk : Tclk is the time taken by one clk to reach to another clk. It is 1clk cycle
 ```
+
+#### HDL code to Synthesized Logic design.
+![Alt Text](workshop_snaps/Hdl-logic.png)
+
 
 
 
