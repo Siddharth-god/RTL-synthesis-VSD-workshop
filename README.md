@@ -60,7 +60,7 @@ How Synthesis Works ?
 ```
 
 What is Library ? (.lib)
---> A library is a collection of pre-designed and characterized logic cells (like AND, OR,       flip-flops) with information about their timing, power, and area, which the synthesizer uses to map RTL code into an optimized gate-level circuit.
+--> A library is a collection of pre-designed and characterized logic cells (like AND, OR,flip-flops) with information about their timing, power, and area, which the synthesizer uses to map RTL code into an optimized gate-level circuit.
 ```
 ```
 Why do we need slow cells?
@@ -83,7 +83,8 @@ Tcombi: Delay of the combinational logic between FFA and FFB.
 Tsetup_b: Setup time of flip-flop B (time data must be stable before the next clock edge).
 
 Why we use this condition ? 
---> For data to be captured correctly by FFB, the signal from FFA must travel through the combinational logic and arrive before the next clock edge minus the setup time of FFB.
+
+For data to be captured correctly by FFB, the signal from FFA must travel through the combinational logic and arrive before the next clock edge minus the setup time of FFB.
 Thus, the clock period must be greater than the total delay: Otherwise, the data may not reach FFB in time, causing a setup violation.
 ```
 What is setup time ? 
@@ -91,6 +92,7 @@ What is setup time ?
 Setup time means we have to give the supply before the clock changes to stabilize the input and also the circuit.
 what is Tclk : Tclk is the time taken by one clk to reach to another clk. It is 1clk cycle
 ```
+
 
 
 
