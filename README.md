@@ -31,3 +31,11 @@ gtkwave tb_good_mux.vcd
 ```
 ![Alt Text](workshop_snaps/run_good_mux_commands.png)
 ![Alt Text](workshop_snaps/run_good_mux_opwaveform.png)
+
+### Verilog Code Of the design.
+##### Code of the design (good_mux.v) :
+Command to follow :
+```bash
+gvim tb_good_mux.v -o good_mux.v
+```
+![Alt Text](workshop_snaps/good_mux_design_code.png)
