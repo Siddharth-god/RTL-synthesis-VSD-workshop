@@ -210,7 +210,99 @@ The outputs of these AND gates are then fed into a single OR gate.
 ![Alt Text](Day2_snaps/and_comparision.png)
 
 
+## Multiple Modules Synthesis
+
+Commands to be followed : 
+
+```bash
+# Open the verilog_file : sky130RTLDesignAndSynthesisWorkshop/verilog_files
+yosys
+
+# Read the library
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# Read the verilog file
+read_verilog multiple_modules.v
+
+# Invoke the synthesis command
+synth -top multiple_modules
+
+# Command abc 
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# See the logic design of multiple modules
+show multiple_modules
+
+# Write the verilog netlist
+write_verilog -noattr multiple_modules_hier.v
+
+# View the netlist using gvim
+!gvim multiple_modules_hier.v
+
+# Writ out a flat netlist
+flatten
+
+# Write flat netlist in verilog code
+write_verilog multiple_modules_flat.v
+
+# View the flat netlist
+!gvim multiple_modules_flat.v
+
+```
+
+To split the window in gvim window use command
+
+```bash
+# Here the file_name can be anything you want to see.
+:vsp multiple_module_hier.v 
+```
+- Initial commands
+![Alt Text](Day2_snaps/synthesis_of_multiple_modules.png)
+
+- Multiple Modules with it's Sub Modules
+![Alt Text](Day2_snaps/multiple_modules.png)
+
+- Mapping RTL (Register Transfer Level) design into a standard cell library(.lib)
+![Alt Text](Day2_snaps/synthesis2.png)
+
+- Hierarchical Design of Multiple_modules
+![Alt Text](Day2_snaps/hierarchical_design3.png)
+
+- Netlist of Multiple Modules
+![Alt Text](Day2_snaps/netlist_mm4.png)
+
+- Flatten Netlist
+![Alt Text](Day2_snaps/flatten_netlist_mm5.png)
+
+- Flatten Logic Design
+![Alt Text](Day2_snaps/flatten_design5.png)
+
+- Comparision between Hierarchical Netlist vs Flattened Netlist
+![Alt Text](Day2_snaps/splitting_gvim_window_6.png)
 
 
+## Sub Modules Synthesis
 
+Commands to be followed : 
 
+```bash
+# Open the verilog_file : sky130RTLDesignAndSynthesisWorkshop/verilog_files
+yosys
+
+# Read the library
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# Read the verilog file
+read_verilog multiple_modules.v
+
+# Invoke the synthesis command
+synth -top sub_module1
+
+# Command abc 
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# See the logic design of multiple modules
+show 
+```
+- Sub_Module Logic Design 
+![Alt Text](Day2_snaps/sub_module1.png)
