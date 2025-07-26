@@ -3,7 +3,7 @@ This is a RTL to FPGA workflow using _iverilog_, _GTKwave_ and _Yosys synthesize
 This is a 10 days Project by VSDIAT.
 
 
-## Day 1 :
+## Day 1 : Introduction to Verilog RTL design and Synthesis
 
 ### Lab: Creating workspace for simulating the designs. 
 
@@ -138,7 +138,40 @@ Netlist
 Simplified Netlist
 ![Alt Text](workshop_snaps/simplified_netlist.png)
 
-# DAY 2
+<h>
+
+## Day 2 : Timimg libs, hierarchical vs flat synthesis and efficient flop coding style
+
+## Timing Libraries 
+### Some points to be aware of :
+- tt: Typical process corner.
+- 025C: Represents a temperature of 25°C, relevant for temperature-dependent performance.
+- 1v80: Indicates a core voltage of 1.8V.
+This naming convention clarifies which process, voltage, and temperature conditions the library models.
+
+### Opening and Exploring the .lib File
+To open the sky130_fd_sc_hd__tt_025C_1v80.lib file:
+
+1. __Locate the file:__
+```bash
+cd sky130RTLDesignAndSynthesisWorkshop/lib
+
+# Use ls to copy the name
+ls
+```
+2. __Open the file:__
+```bash
+gvim sky130_fd_sc_hd__tt_025C_1v80.lib
+```
+Library file 
+![Alt Text](Day2_snaps/turnoff_syntax.png)
+
+Use the command to turnoff the syntax
+```bash
+# Shown in the image above
+(shift) : syn off
+```
+![Alt Text](Day2_snaps/library.png)
 
 
 
