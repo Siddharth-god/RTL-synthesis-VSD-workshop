@@ -144,13 +144,13 @@ Simplified Netlist
 
 ## Timing Libraries 
 ### Some points to be aware of :
-- tt: Typical process corner.
-- 025C: Represents a temperature of 25°C, relevant for temperature-dependent performance.
-- 1v80: Indicates a core voltage of 1.8V.
+- tt : Typical process corner.
+- 025C : Represents a temperature of 25°C, relevant for temperature-dependent performance.
+- 1v80 : Indicates a core voltage of 1.8V.
 This naming convention clarifies which process, voltage, and temperature conditions the library models.
 
 ### Opening and Exploring the .lib File
-To open the sky130_fd_sc_hd__tt_025C_1v80.lib file:
+To open the sky130_fd_sc_hd__tt_025C_1v80.lib file :
 
 1. __Locate the file:__
 ```bash
@@ -174,11 +174,38 @@ Use the command to turnoff the syntax
 ![Alt Text](Day2_snaps/library.png)
 
 
+### Behavioural models with _only_ logic gates and without any power port :
 
+1. a2111o cell model : (and 2 inputs, 3 or with 1 inputs)
+```bash
+# In the view window add this command not in the linux window.
+:sp ../my_lib/verilog_model/sky130_fd_sc_hd__a2111o.behavioural.v
 
+# How A2111O is described:
+A = AND stage.
+O = OR stage (final stage).
+2111 = Input distribution to the AND gates.
+Interpretation of A2111O:
+# There are 4 AND gates in the first stage:
+1st AND gate = 2 inputs.
+2nd AND gate = 1 input.
+3rd AND gate = 1 input.
+4th AND gate = 1 input.
+# The outputs of these AND gates are then fed into a single OR gate.
+```
+![Alt Text](Day2_snaps/behaviouralmodel.png)
+![Alt Text](Day2_snaps/a2111o.png)
 
+2. AND gate model 
+```bash
+# In the view window add this command not in the linux window.
+:sp ../my_lib/verilog_model/sky130_fd_sc_hd__and2.behavioural.v
+```
+- AND gate comparision (and2_0 vs and2_2)
+![Alt Text](Day2_snaps/and2.png)
 
-
+- This image shows : How the width of the gates can change the power usage and time.
+![Alt Text](Day2_snaps/and_comparision.png)
 
 
 
