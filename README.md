@@ -176,7 +176,7 @@ Use the command to turnoff the syntax
 
 ### Behavioural models with _only_ logic gates and without any power port :
 
-1. a2111o cell model : (and 2 inputs, 3 or with 1 inputs)
+1. a2111o cell model : 
 ```bash
 # In the view window add this command not in the linux window.
 :sp ../my_lib/verilog_model/sky130_fd_sc_hd__a2111o.behavioural.v
@@ -186,12 +186,14 @@ A = AND stage.
 O = OR stage (final stage).
 2111 = Input distribution to the AND gates.
 Interpretation of A2111O:
+
 # There are 4 AND gates in the first stage:
 1st AND gate = 2 inputs.
 2nd AND gate = 1 input.
 3rd AND gate = 1 input.
 4th AND gate = 1 input.
-# The outputs of these AND gates are then fed into a single OR gate.
+
+The outputs of these AND gates are then fed into a single OR gate.
 ```
 ![Alt Text](Day2_snaps/behaviouralmodel.png)
 ![Alt Text](Day2_snaps/a2111o.png)
