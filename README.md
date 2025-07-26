@@ -81,7 +81,7 @@ what is Tclk : Tclk is the time taken by one clk to reach to another clk. It is 
 
 ## Synthesis (good_mux.v)
 
-Commands to invoke the yosis and get the logical circuit
+Commands to invoke the yosys and get the logical circuit
 
 ```bash
 # Invoking the yosys
@@ -114,13 +114,28 @@ write_verilog -noattr good_mux_netlist.v
 
 Images of the synthesis process
 
+Invoking the Yosys
 ![Alt Text](workshop_snaps/invoking_yosys.png)
+
+Reading Library
 ![Alt Text](workshop_snaps/commands.png)
+
+Reading verilog code
 ![Alt Text](workshop_snaps/commands2.png)
+
+Input and Output signals of the good mux
 ![Alt Text](workshop_snaps/ip_op_signals.png)
+
+Invoking the logic design
 ![Alt Text](workshop_snaps/logic_design.png)
+
+Writing the Netlist
 ![Alt Text](workshop_snaps/write_netlist.png)
+
+Netlist
 ![Alt Text](workshop_snaps/netlist.png)
+
+Simplified Netlist
 ![Alt Text](workshop_snaps/simplified_netlist.png)
 
 # DAY 2
