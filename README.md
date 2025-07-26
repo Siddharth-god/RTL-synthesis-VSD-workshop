@@ -79,6 +79,51 @@ what is Tclk : Tclk is the time taken by one clk to reach to another clk. It is 
 #### HDL code to Synthesized Logic design.
 ![Alt Text](workshop_snaps/Hdl-logic.png)
 
+## Synthesis (good_mux.v)
+
+Commands to invoke the yosis and get the logical circuit
+
+```bash
+1. Invoking the yosys
+yosys
+
+2. Reading the library 
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+3. Reading the Verilog file
+read_verilog good_mux.v
+
+4. Using library to use the logic gates
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+5. To show the design created 
+show
+
+6. Writing the netlist for given design
+write_verilog good_mux_netlist.v
+
+7. To view the netlist using gvim
+!gvim good_mux_netlist.v
+
+8. Simplyfying the netlist 
+write_verilog -noattr good_mux_netlist.v
+
+9. Viewing the netlist again 
+!gvim good_mux_netlist.v
+```
+
+Images of the synthesis process
+
+![Alt Text](workshop_snaps/invoking_yosys.png)
+![Alt Text](workshop_snaps/commands.png)
+![Alt Text](workshop_snaps/commands2.png)
+![Alt Text](workshop_snaps/ip_op_signals.png)
+![Alt Text](workshop_snaps/logic_design.png)
+![Alt Text](workshop_snaps/write_netlist.png)
+![Alt Text](workshop_snaps/netlist.png)
+![Alt Text](workshop_snaps/simplified_netlist.png)
+
+# DAY 2
 
 
 
