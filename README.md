@@ -420,6 +420,10 @@ gtkwave tb_dff_syncres.vcd
 
 Commands to be followed : 
 ```bash
+
+- Asynchronous reset: Overrides clock, setting q to 0 immediately.
+- Edge-triggered: Captures d on rising clock edge if reset is low.
+
 # Open the directory 
 cd sky130RTLDesignAndSynthesisWorkshop/verilog_files
 
@@ -452,6 +456,8 @@ show
 Commands to be followed : 
 ```bash
 
+- Asynchronous set: Overrides clock, setting q to 1 immediately.
+
 # Reading Verilog file
 read_verilog dff_async_set.v
 
@@ -474,6 +480,7 @@ show
 
 Commands to be followed : 
 ```bash
+
 - Synchronous reset: Takes effect only on the clock edge.
 
 # Reading Verilog file
