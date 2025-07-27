@@ -306,3 +306,87 @@ show
 ```
 - Sub_Module Logic Design 
 ![Alt Text](Day2_snaps/sub_module1.png)
+
+## Flip-Flop Coding Styles 
+
+Follow the commands : 
+```bash
+# Open the directory
+cd sky130RTLDesignAndSynthesisWorkshop/verilog_files
+
+# Open d flip-flop files 
+ls *dff*
+```
+
+### Asynchronous/Synchronous SET and RESET.
+
+#### Asyncronous Reset 
+
+Commands to be followed : 
+```bash
+# Run the command 
+cd iverilog dff_asyncres.v tb_dff_asyncres.v
+
+# 
+./a.out
+
+gtkwave tb_dff_asyncres.vcd
+```
+![Alt Text](Day2_snaps/asyncres_waveform.png)
+
+You can see in the second image the behaviour of the _Asynchronous Reset_. First on the clock edge our OUTPUT(Q) got HIGH but instantly 
+we can see due to the _Reset_ our Q got _Low (0)_ again. Its because of the "Asynchronous" reset. 
+
+![Alt Text](Day2_snaps/asyncres_behaviour.png)
+
+### Asynchronous Set
+
+Commands to be followed : 
+```bash
+# Run the command 
+cd iverilog dff_async_set.v tb_dff_async_set.v
+
+# 
+./a.out
+
+gtkwave tb_dff_async_set.vcd
+```
+![Alt Text](Day2_snaps/async_set.png)
+
+You can see in the second image the behaviour of the _Asynchronous Set_. The OUTPUT(Q) goes HIGH when set is HIGH and after that clock gets HIGH and our OUTPUT remains HIGH till our set remains HIGH. Therefore it tells us that "Asynchronous" is _Idepentent of the clock_. 
+When set is HIGH, irresprctive of clock our _Output_ will remain in the same position it was at the start of the _Asynchronous Set_ -- And once our SET is gone our OUTPUT changes based on CLOCK.
+
+![Alt Text](Day2_snaps/async_set_behaviour.png)
+
+### Synchronous Reset
+
+Commands to be followed : 
+```bash
+# Run the command 
+cd iverilog dff_syncres.v tb_dff_syncres.v
+
+# 
+./a.out
+
+gtkwave tb_dff_syncres.vcd
+```
+![Alt Text](Day2_snaps/syncres_waveform.png)
+
+The RESET went HIGH but still our OUTPUT not getting "0" - Because the OUTPUT is waiting for clock as a stimulation and when clock goes HIGH we can see the OUTPUT goes LOW "0". This is how SYNCHRONOUS RESET behave. 
+![Alt Text](Day2_snaps/syncres_behaviour.png)
+
+Once we enter into "always @" Block because _Posedge_ of the clock -- Then in the _Always Block_ Reset has given the _higher Priority_ than the Clock - and our OUTPUT will remain _Low_ Until reset is Present doesn't matter if clock is High or LOw. That you can see in the image below.
+![Alt Text](Day2_snaps/syncres_behaviour2.png)
+
+
+## Synthesis of Syncronous/Asyncronous SET and RESET
+
+Commands to be followed : 
+```bash
+# Open the directory 
+cd sky130RTLDesignAndSynthesisWorkshop/verilog_files
+
+# Invoke Yosys
+Yosys
+
+# 
