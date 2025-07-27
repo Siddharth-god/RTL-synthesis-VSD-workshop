@@ -504,3 +504,61 @@ show
 
 ![Alt Text](Day2_snaps/syncres_op.png)
 
+## Some special cases where _abc -liberty_ doesn't work :
+
+1. mul2 : Run Commands in Yosys
+```bash
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+read_verilog mult_2.v
+
+synth -top mul2
+
+# When to not call liberty (when there is nothing to call - means when there are no cells in design from library)
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# View the design
+show
+
+# Writing Netlist
+write_netlist -noattr mul2_net.v
+
+# View the Netlist
+!gvim mul2_net.v
+```
+![Alt Text](Day2_snaps/calling_abcliberty.png)
+
+- If you see here we have not used any cells or gates that's why our command didn't worked. 
+- Our output has one more bit than which got appended with "zero" and input remain exact on both sides.
+- Now if the relation between _a_ and _y_ is _2 x a = y_ then we just have to append one zero in the binary value of _a_ and that's our _output_. Therefore, this is what this special case shows to us. 
+
+![Alt Text](Day2_snaps/special_case1.png)
+
+![Alt Text](Day2_snaps/netlist_of_mul2.png)
+
+
+2. mult8 : Run Commands in Yosys
+```bash
+
+read_verilog mult_8.v
+
+synth -top mult8
+
+# When to not call liberty (when there is nothing to call - means when there are no cells in design from library)
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# View the design
+show
+
+# Writing Nelist
+write_verilog -noattr mult_8.v
+
+# View the Netlist
+!gvim mult_8.v
+```
+- If you see in the white area there is written that _nuumber of cells_ 0. Which tell us that this is a special case where no cells are used and we can change the structure of design freely. 
+![Alt Text](Day2_snaps/mult8.png)
+
+![Alt Text](Day2_snaps/mult8_d.png)
+
+![Alt Text](Day2_snaps/netlist_mult8.png)
