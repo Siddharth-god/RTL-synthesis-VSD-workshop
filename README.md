@@ -309,7 +309,7 @@ show
 
 ## Flip-Flop Coding Styles 
 
-Follow the commands : 
+Follow the commands to get the designs: 
 ```bash
 # Open the directory
 cd sky130RTLDesignAndSynthesisWorkshop/verilog_files
@@ -327,15 +327,18 @@ Commands to be followed :
 # Run the command 
 cd iverilog dff_asyncres.v tb_dff_asyncres.v
 
-# 
+# Get the vsd file
 ./a.out
 
+# Get the waveform 
 gtkwave tb_dff_asyncres.vcd
 ```
 ![Alt Text](Day2_snaps/asyncres_waveform.png)
 
+```
 You can see in the second image the behaviour of the _Asynchronous Reset_. First on the clock edge our OUTPUT(Q) got HIGH but instantly 
 we can see due to the _Reset_ our Q got _Low (0)_ again. Its because of the "Asynchronous" reset. 
+```
 
 ![Alt Text](Day2_snaps/asyncres_behaviour.png)
 
@@ -346,36 +349,50 @@ Commands to be followed :
 # Run the command 
 cd iverilog dff_async_set.v tb_dff_async_set.v
 
-# 
+# Get the vsd file
 ./a.out
 
+# Get the waveform 
 gtkwave tb_dff_async_set.vcd
 ```
 ![Alt Text](Day2_snaps/async_set.png)
 
-You can see in the second image the behaviour of the _Asynchronous Set_. The OUTPUT(Q) goes HIGH when set is HIGH and after that clock gets HIGH and our OUTPUT remains HIGH till our set remains HIGH. Therefore it tells us that "Asynchronous" is _Idepentent of the clock_. 
+- You can see in the second image the behaviour of the _Asynchronous Set_. The OUTPUT(Q) goes HIGH when set is HIGH and after that clock gets HIGH and our OUTPUT remains HIGH till our set remains HIGH. Therefore it tells us that "Asynchronous" is _Idepentent of the clock_. 
 When set is HIGH, irresprctive of clock our _Output_ will remain in the same position it was at the start of the _Asynchronous Set_ -- And once our SET is gone our OUTPUT changes based on CLOCK.
 
 ![Alt Text](Day2_snaps/async_set_behaviour.png)
 
 ### Synchronous Reset
 
+Coding Style : 
+```bash
+module dff_syncres ( input clk , input async_reset , input sync_reset , input d , output reg q );
+always @ (posedge clk )
+begin
+if (sync_respt)
+    q <= w1'b0;
+else
+    q <= d;
+end
+endmodule
+```
 Commands to be followed : 
 ```bash
 # Run the command 
 cd iverilog dff_syncres.v tb_dff_syncres.v
 
-# 
+# Get the vsd file 
 ./a.out
 
+# Get the waveform 
 gtkwave tb_dff_syncres.vcd
 ```
 ![Alt Text](Day2_snaps/syncres_waveform.png)
 
-The RESET went HIGH but still our OUTPUT not getting "0" - Because the OUTPUT is waiting for clock as a stimulation and when clock goes HIGH we can see the OUTPUT goes LOW "0". This is how SYNCHRONOUS RESET behave. 
+- The RESET went HIGH but still our OUTPUT not getting "0" - Because the OUTPUT is waiting for clock as a stimulation and when clock goes HIGH we can see the OUTPUT goes LOW "0". This is how SYNCHRONOUS RESET behave. 
 ![Alt Text](Day2_snaps/syncres_behaviour.png)
 
-Once we enter into "always @" Block because _Posedge_ of the clock -- Then in the _Always Block_ Reset has given the _higher Priority_ than the Clock - and our OUTPUT will remain _Low_ Until reset is Present doesn't matter if clock is High or LOw. That you can see in the image below.
+- Once we enter into "always @" Block because _Posedge_ of the clock -- Then in the _Always Block_ Reset has given the _higher Priority_ than the Clock - and our OUTPUT will remain _Low_ Until reset is Present doesn't matter if clock is High or LOw. That you can see in the image below.
 ![Alt Text](Day2_snaps/syncres_behaviour2.png)
 
 
