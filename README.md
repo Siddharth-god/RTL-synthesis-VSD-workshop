@@ -335,10 +335,8 @@ gtkwave tb_dff_asyncres.vcd
 ```
 ![Alt Text](Day2_snaps/asyncres_waveform.png)
 
-```
-You can see in the second image the behaviour of the _Asynchronous Reset_. First on the clock edge our OUTPUT(Q) got HIGH but instantly 
-we can see due to the _Reset_ our Q got _Low (0)_ again. Its because of the "Asynchronous" reset. 
-```
+- You can see in the second image the behaviour of the _Asynchronous Reset_. First on the clock edge our OUTPUT(Q) got HIGH but instantly we can see due to the _Reset_ our Q got _Low (0)_ again. Its because of the "Asynchronous" reset. 
+
 
 ![Alt Text](Day2_snaps/asyncres_behaviour.png)
 
@@ -357,8 +355,8 @@ gtkwave tb_dff_async_set.vcd
 ```
 ![Alt Text](Day2_snaps/async_set.png)
 
-- You can see in the second image the behaviour of the _Asynchronous Set_. The OUTPUT(Q) goes HIGH when set is HIGH and after that clock gets HIGH and our OUTPUT remains HIGH till our set remains HIGH. Therefore it tells us that "Asynchronous" is _Idepentent of the clock_. 
-When set is HIGH, irresprctive of clock our _Output_ will remain in the same position it was at the start of the _Asynchronous Set_ -- And once our SET is gone our OUTPUT changes based on CLOCK.
+- You can see in the second image the behaviour of the _Asynchronous Set_. The Output(Q) goes HIGH when set is HIGH and after that clock gets HIGH and our OUTPUT remains HIGH till our set remains HIGH. Therefore it tells us that "Asynchronous" is _Idepentent of the clock_. 
+- When set is HIGH, irresprctive of clock our _Output_ will remain in the same position it was at the start of the _Asynchronous Set_ -- And once our SET is gone our OUTPUT changes based on CLOCK.
 
 ![Alt Text](Day2_snaps/async_set_behaviour.png)
 
