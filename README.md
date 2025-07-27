@@ -320,8 +320,18 @@ ls *dff*
 
 ### Asynchronous/Synchronous SET and RESET.
 
-#### Asyncronous Reset 
+#### Asyncronous Reset _D flip-flop_
 
+- Coding Style : 
+```bash
+module dff_asyncres (input clk, input async_reset, input d, output reg q);
+  always @ (posedge clk, posedge async_reset)
+    if (async_reset)
+      q <= 1'b0;
+    else
+      q <= d;
+endmodule
+```
 Commands to be followed : 
 ```bash
 # Run the command 
@@ -340,8 +350,18 @@ gtkwave tb_dff_asyncres.vcd
 
 ![Alt Text](Day2_snaps/asyncres_behaviour.png)
 
-### Asynchronous Set
+### Asynchronous Set _D flip-flop_
 
+- Coding Style : 
+```bash
+module dff_async_set (input clk, input async_set, input d, output reg q);
+  always @ (posedge clk, posedge async_set)
+    if (async_set)
+      q <= 1'b1;
+    else
+      q <= d;
+endmodule
+```
 Commands to be followed : 
 ```bash
 # Run the command 
@@ -364,14 +384,12 @@ gtkwave tb_dff_async_set.vcd
 
 Coding Style : 
 ```bash
-module dff_syncres ( input clk , input async_reset , input sync_reset , input d , output reg q );
-always @ (posedge clk )
-begin
-if (sync_respt)
-    q <= w1'b0;
-else
-    q <= d;
-end
+module dff_syncres (input clk, input async_reset, input sync_reset, input d, output reg q);
+  always @ (posedge clk)
+    if (sync_reset)
+      q <= 1'b0;
+    else
+      q <= d;
 endmodule
 ```
 Commands to be followed : 
