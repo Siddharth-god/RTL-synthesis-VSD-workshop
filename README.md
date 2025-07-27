@@ -93,7 +93,7 @@ read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 # Reading the Verilog file
 read_verilog good_mux.v
 
-#Using library to use the logic gates
+# Using library to use the logic gates
 abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 
 # To show the design created 
@@ -227,7 +227,7 @@ read_verilog multiple_modules.v
 # Invoke the synthesis command
 synth -top multiple_modules
 
-# Command abc 
+# Using library to use the logic gates
 abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 
 # See the logic design of multiple modules
@@ -298,7 +298,7 @@ read_verilog multiple_modules.v
 # Invoke the synthesis command
 synth -top sub_module1
 
-# Command abc 
+# Using library to use the logic gates
 abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 
 # See the logic design of multiple modules
@@ -406,13 +406,17 @@ gtkwave tb_dff_syncres.vcd
 ![Alt Text](Day2_snaps/syncres_waveform.png)
 
 - The RESET went HIGH but still our OUTPUT not getting "0" - Because the OUTPUT is waiting for clock as a stimulation and when clock goes HIGH we can see the OUTPUT goes LOW "0". This is how SYNCHRONOUS RESET behave. 
+
 ![Alt Text](Day2_snaps/syncres_behaviour.png)
 
 - Once we enter into "always @" Block because _Posedge_ of the clock -- Then in the _Always Block_ Reset has given the _higher Priority_ than the Clock - and our OUTPUT will remain _Low_ Until reset is Present doesn't matter if clock is High or LOw. That you can see in the image below.
+
 ![Alt Text](Day2_snaps/syncres_behaviour2.png)
 
 
 ## Synthesis of Syncronous/Asyncronous SET and RESET
+
+1. Asynchronous Reset : 
 
 Commands to be followed : 
 ```bash
@@ -422,4 +426,72 @@ cd sky130RTLDesignAndSynthesisWorkshop/verilog_files
 # Invoke Yosys
 Yosys
 
-# 
+# Reading library
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# Reading Verilog file
+read_verilog dff_asyncres.v
+
+# Run Synthesis by choosing the design
+synth -top dff_asyncres
+
+# Give the dff command to only look for d flip-flops
+dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# Using library to use the logic gates
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# View the design using
+show
+```
+![Alt Text](Day2_snaps/asyncres_synthesis.png)
+
+
+2. Asynchronous Set : 
+
+Commands to be followed : 
+```bash
+
+# Reading Verilog file
+read_verilog dff_async_set.v
+
+# Run Synthesis by choosing the design
+synth -top dff_async_set
+
+# Give the dff command to only look for d flip-flops
+dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# Using library to use the logic gates
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# View the design using
+show
+```
+![Alt Text](Day2_snaps/async_set_synthesis.png)
+
+
+3. Synchronous Reset : 
+
+Commands to be followed : 
+```bash
+
+# Reading Verilog file
+read_verilog dff_syncres.v
+
+# Run Synthesis by choosing the design
+synth -top dff_syncres
+
+# Give the dff command to only look for d flip-flops
+dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# Using library to use the logic gates
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# View the design using
+show
+```
+![Alt Text](Day2_snaps/syncres_synthesis.png)
+
+- We are getting the same output as we expected.
+![Alt Text](Day2_snaps/syncres_op.png)
+
