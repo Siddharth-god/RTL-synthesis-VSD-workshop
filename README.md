@@ -474,6 +474,7 @@ show
 
 Commands to be followed : 
 ```bash
+- Synchronous reset: Takes effect only on the clock edge.
 
 # Reading Verilog file
 read_verilog dff_syncres.v
@@ -493,5 +494,6 @@ show
 ![Alt Text](Day2_snaps/syncres_synthesis.png)
 
 - We are getting the same output as we expected.
+
 ![Alt Text](Day2_snaps/syncres_op.png)
 
