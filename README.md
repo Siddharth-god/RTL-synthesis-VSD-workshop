@@ -562,3 +562,284 @@ write_verilog -noattr mult_8.v
 ![Alt Text](Day2_snaps/mult8_d.png)
 
 ![Alt Text](Day2_snaps/netlist_mult8.png)
+
+<h>
+
+## Day 3 : Combinational and Sequential Optimization
+
+### Combinational Logic Optimization :
+
+```bash
+# Open the directory
+cd sky130RTLDesignAndSynthesisWorkshop/verilog_files
+
+# Open the optimization files directory 
+ls *opt_check*
+```
+
+### Synthesis of opt modules
+
+1. Opt_check 1 
+
+Design Code :
+```bash
+module opt_check (input a , input b , output y);
+	assign y = a?b:0;
+endmodule
+```
+
+Commands to Run Synthesis :
+
+```bash
+# Open Directory
+cd sky130RTLDesignAndSynthesisWorkshop/verilog_files 
+
+# Invoke Yosys
+yosys
+
+# Read library 
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# Read verilog file 
+read_verilog opt_check.v
+
+# Get the file for synthesis 
+synth -top opt_check
+
+# Executing OPT_CLEAN pass (remove unused cells and wires).
+opt_clean -purge
+
+# Using library to use the logic gates
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# View the file 
+show
+```
+- Logic design Optimized 
+
+![Alt Text](Day3_snaps/opt_check1.png)
+
+2. Opt_check 2 
+
+Design Code :
+```bash
+module opt_check2 (input a , input b , output y);
+	assign y = a?1:b;
+endmodule
+```
+
+Commands to Run Synthesis :
+```bash
+# Read verilog file 
+read_verilog opt_check2.v
+
+# Get the file for synthesis 
+synth -top opt_check2
+
+# Executing OPT_CLEAN pass (remove unused cells and wires).
+opt_clean -purge
+
+# Using library to use the logic gates
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# View the file 
+show
+```
+- Logic design Optimized 
+
+![Alt Text](Day3_snaps/opt_check2.png)
+
+3. Opt_check 3
+
+Design Code :
+```bash
+module opt_check3 (input a , input b, input c , output y);
+  assign y = a?(c?b:0):0;
+endmodule
+opt_check3.v (END)
+
+```
+
+Commands to Run Synthesis :
+
+```bash
+# Read verilog file 
+read_verilog opt_check3.v
+
+# Get the file for synthesis 
+synth -top opt_check3
+
+# Executing OPT_CLEAN pass (remove unused cells and wires).
+opt_clean -purge
+
+# Using library to use the logic gates
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# View the file 
+show
+```
+- Logic design Optimized 
+
+![Alt Text](Day3_snaps/opt_check3_3ipandgate.png)
+
+- Explaination
+
+![Alt Text](Day3_snaps/opt_check3_codeexplain.png)
+
+
+4. Opt_check 4
+
+Design Code :
+```bash
+module opt_check4 (input a , input b , input c , output y);
+ assign y = a?(b?(a & c ):c):(!c);
+ endmodule
+```
+
+Commands to Run Synthesis :
+
+```bash
+# Read verilog file 
+read_verilog opt_check4.v
+
+# Get the file for synthesis 
+synth -top opt_check4
+
+# Executing OPT_CLEAN pass (remove unused cells and wires).
+opt_clean -purge
+
+# Using library to use the logic gates
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# View the file 
+show
+```
+- Logic design Optimized 
+
+![Alt Text](Day3_snaps/opt_check4.png)
+
+5. Multiple module opt 
+
+Design Code :
+```bash
+module sub_module1(input a , input b , output y);
+ assign y = a & b;
+endmodule
+
+
+module sub_module2(input a , input b , output y);
+ assign y = a^b;
+endmodule
+
+
+module multiple_module_opt(input a , input b , input c , input d , output y);
+wire n1,n2,n3;
+
+sub_module1 U1 (.a(a) , .b(1'b1) , .y(n1));
+sub_module2 U2 (.a(n1), .b(1'b0) , .y(n2));
+sub_module2 U3 (.a(b), .b(d) , .y(n3));
+
+assign y = c | (b & n1); 
+
+endmodule
+multiple_module_opt.v (END)
+```
+
+Commands to Run Synthesis :
+
+```bash
+# Read verilog file 
+read_verilog multiple_module_opt.v
+
+# Get the file for synthesis 
+synth -top multiple_module_opt
+
+# Flattening the design to convert the hierarchical structure into whole structure 
+flatten
+
+# --> Why we do flattening ? 
+# In Yosys, flattening is used to transform a hierarchical design into a single-level netlist, which means all module instances are recursively inlined into one top-level module.
+
+# Executing OPT_CLEAN pass (remove unused cells and wires).
+opt_clean -purge
+
+# Using library to use the logic gates
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# View the file 
+show
+```
+- Logic design Optimized 
+
+![Alt Text](Day3_snaps/multiple_module_opt_flattened.png)
+
+6. Multiple module opt2
+
+Design Code :
+```bash
+module multiple_module_opt2(a, b, c, d, y);
+  wire _0_;
+  wire _1_;
+  wire _2_;
+  wire _3_;
+  wire _4_;
+  wire \U1.y ;
+  wire \U2.y ;
+  wire \U3.y ;
+  input a;
+  wire a;
+  input b;
+  wire b;
+  input c;
+  wire c;
+  input d;
+  wire d;
+  output y;
+  wire y;
+  assign _4_ = 1'h0;
+  assign _0_ = a;
+  assign _2_ = c;
+  assign _1_ = b;
+  assign _3_ = d;
+  assign y = _4_;
+endmodule
+multiple_module_opt2.v (END)
+```
+
+Commands to Run Synthesis :
+
+```bash
+# Read verilog file 
+read_verilog multiple_module_opt2.v
+
+# Get the file for synthesis 
+synth -top multiple_module_opt2
+
+# Flattening the design to convert the hierarchical structure into whole structure 
+flatten
+
+# --> Why we do flattening ? 
+# In Yosys, flattening is used to transform a hierarchical design into a single-level netlist, which means all module instances are recursively inlined into one top-level module.
+
+# Executing OPT_CLEAN pass (remove unused cells and wires).
+opt_clean -purge
+
+# Using library to use the logic gates
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# View the file 
+show
+
+# Dumping Netlist 
+write_verilog -noattr multiple_module_opt2_netlist.v
+
+# View the netlist
+!gvim multiple_module_opt2_netlist.v
+```
+- Logic Design Optimized 
+
+![Alt Text](Day3_snaps/multiple_module_opt2_flattened.png)
+
+- Netlist (flattened) 
+
+![Alt Text](Day3_snaps/mm_opt2_netlist_flattened.png)
