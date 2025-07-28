@@ -1026,6 +1026,11 @@ show
 
 ![Alt Text](Day3_snaps/dff_const3_synthesis.png)
 
+- Design explanation 
+
+![Alt Text](Day3_snaps/dff_const3_explain.png)
+
+
 - Number of flops in the design 
 
 ![Alt Text](Day3_snaps/dff_const3_2flopcells.png)
