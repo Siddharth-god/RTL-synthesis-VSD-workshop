@@ -864,10 +864,11 @@ gtkwave tb_dff_const1.vcd
 
 ```
 Explanation :
-- When Reset is 0 the Q doesn't instantly change to 1 instead it waits for the positive clock edge as given in code and then it Q becomes 1.Even though this is an asynchronous reset, the output q waits for the positive clock edge because asynchronous behavior only occurs when reset goes high. When reset becomes 0, it doesn't trigger the always @(posedge clk or posedge reset) block. So, q doesn't update immediately — it waits for the next rising edge of clk, where the else condition runs and sets q to 1.
+- When Reset is 0 the Q doesn't instantly change to 1 instead it waits for the positive clock edge as given in code and then it Q becomes 1.
+Even though this is an asynchronous reset, the output q waits for the positive clock edge because asynchronous behavior only occurs when reset goes high. When reset becomes 0, it doesn't trigger the always @(posedge clk or posedge reset) block. So, q doesn't update immediately — it waits for the next rising edge of clk, where the else condition runs and sets q to 1.
 ```
 
-### Synthesis of dff_const1 
+#### Synthesis of dff_const1 
 
 Commands to follow : 
 ```bash
@@ -888,6 +889,7 @@ show
 ```
 
 Our design has active high reset that's why synthesis given us inverter before the reset pin. You can see in the image below we have _Not_ gate attached to _Reset_.
+
 ![Alt Text](Day3_snaps/dff_const1_synthesis.png)
 
 ![Alt Text](Day3_snaps/dff_const1_onedffcell.png)
@@ -910,10 +912,22 @@ end
 endmodule
 dff_const2.v (END)
 ```
+Commands to Run the Verilog Files : 
+```bash
+# Run in iverilog 
+iverilog dff_const1.v tb_dff_const2.v
+
+# Get the vcd file 
+./a.out
+
+# See the waverform
+gtkwave tb_dff_const2.vcd
+```
+- Waveform of dff_const2
 
 ![Alt Text](Day3_snaps/dff_const2.png)
 
-### Synthesis of dff_const2
+#### Synthesis of dff_const2
 
 Commands to follow : 
 ```bash
@@ -938,4 +952,156 @@ As our Q is always one, there was no need to use any flop in the design and that
 ![Alt Text](Day3_snaps/dff_const2_synthesis.png)
 
 ![Alt Text](Day3_snaps/dff_const2_nocells_present.png)
+
+<h>
+
+3. dff_const 3
+
+Design Code : 
+```verilog
+module dff_const3(input clk, input reset, output reg q);
+reg q1;
+
+always @(posedge clk, posedge reset)
+begin
+        if(reset)
+        begin
+                q <= 1'b1;
+                q1 <= 1'b0;
+        end
+        else
+        begin
+                q1 <= 1'b1;
+                q <= q1;
+        end
+end
+
+endmodule
+dff_const3.v (END)
+
+```
+Commands to Run the Verilog Files : 
+```bash
+# Run in iverilog 
+iverilog dff_const1.v tb_dff_const3.v
+
+# Get the vcd file 
+./a.out
+
+# See the waverform
+gtkwave tb_dff_const3.vcd
+```
+- Waveform of dff_const3
+
+![Alt Text](Day3_snaps/dff_const3.png)
+
+#### Synthesis of dff_const2
+
+Commands to follow : 
+```bash
+# Read Library -- If you are runnig directly after running the const1 then no need for reading library.
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# Read Verilog file 
+read_verilog dff_const3.v
+
+# Do syhthesis 
+synth -top dff_const3
+
+# Mapping the dff using dfflibmap
+dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# View the design 
+show
+```
+
+As our Q is always one, there was no need to use any flop in the design and that's why our design has no cells used from library.
+
+![Alt Text](Day3_snaps/dff_const3_synthesis.png)
+
+![Alt Text](Day3_snaps/dff_const3_2flopcells.png)
+
+<h>
+
+4. dff_const 4
+
+```
+Every commands for next two designs (const4 and const5) and synthesis will be as same as we did for all the dff_constants. 
+```
+Design Code : 
+```verilog
+module dff_const4(input clk, input reset, output reg q);
+reg q1;
+
+always @(posedge clk, posedge reset)
+begin
+        if(reset)
+        begin
+                q <= 1'b1;
+                q1 <= 1'b1;
+        end
+        else
+        begin
+                q1 <= 1'b1;
+                q <= q1;
+        end
+end
+
+endmodule
+dff_const4.v (END)
+```
+- Waveform for dff_count4
+
+![Alt Text](Day3_snaps/dff_const4.png)
+
+- Present flops in the circuit are 0. 
+
+![Alt Text](Day3_snaps/dff_const4_noflopspresent.png)
+
+- Synthesis Image for dff_const4
+
+![Alt Text](Day3_snaps/dff_const4_synthesis.png)
+
+<h>
+
+4. dff_const 5
+
+Design Code : 
+```verilog
+module dff_const5(input clk, input reset, output reg q);
+reg q1;
+
+always @(posedge clk, posedge reset)
+begin
+        if(reset)  // Only one the posedge of the reset our reset will work.
+        begin      // When reset becomes 0, our Q will change only when there is clk posedge.
+                q <= 1'b0;
+                q1 <= 1'b0;
+        end
+        else
+        begin
+                q1 <= 1'b1;
+                q <= q1;
+        end
+end
+
+endmodule
+dff_const5.v (END)
+
+```
+- Waveform for dff_count5
+
+![Alt Text](Day3_snaps/dff_const5.png)
+
+- Present flops in the circuit are 0. 
+
+![Alt Text](Day3_snaps/dff_const5_2flopspresent.png)
+
+- Synthesis Image for dff_const5
+
+![Alt Text](Day3_snaps/dff_const5_synthesis.png)
+
+
+### Sequential Optimization for unused output
+
 
