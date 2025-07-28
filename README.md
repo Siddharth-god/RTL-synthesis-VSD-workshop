@@ -323,7 +323,7 @@ ls *dff*
 #### Asyncronous Reset _D flip-flop_
 
 - Coding Style : 
-```bash
+```verilog
 module dff_asyncres (input clk, input async_reset, input d, output reg q);
   always @ (posedge clk, posedge async_reset)
     if (async_reset)
@@ -353,7 +353,7 @@ gtkwave tb_dff_asyncres.vcd
 ### Asynchronous Set _D flip-flop_
 
 - Coding Style : 
-```bash
+```verilog
 module dff_async_set (input clk, input async_set, input d, output reg q);
   always @ (posedge clk, posedge async_set)
     if (async_set)
@@ -383,7 +383,7 @@ gtkwave tb_dff_async_set.vcd
 ### Synchronous Reset
 
 Coding Style : 
-```bash
+```verilog
 module dff_syncres (input clk, input async_reset, input sync_reset, input d, output reg q);
   always @ (posedge clk)
     if (sync_reset)
@@ -582,7 +582,7 @@ ls *opt_check*
 1. Opt_check 1 
 
 Design Code :
-```bash
+```verilog
 module opt_check (input a , input b , output y);
 	assign y = a?b:0;
 endmodule
@@ -622,7 +622,7 @@ show
 2. Opt_check 2 
 
 Design Code :
-```bash
+```verilog
 module opt_check2 (input a , input b , output y);
 	assign y = a?1:b;
 endmodule
@@ -652,7 +652,7 @@ show
 3. Opt_check 3
 
 Design Code :
-```bash
+```verilog
 module opt_check3 (input a , input b, input c , output y);
   assign y = a?(c?b:0):0;
 endmodule
@@ -690,7 +690,7 @@ show
 4. Opt_check 4
 
 Design Code :
-```bash
+```verilog
 module opt_check4 (input a , input b , input c , output y);
  assign y = a?(b?(a & c ):c):(!c);
  endmodule
@@ -721,7 +721,7 @@ show
 5. Multiple module opt 
 
 Design Code :
-```bash
+```verilog
 module sub_module1(input a , input b , output y);
  assign y = a & b;
 endmodule
@@ -777,33 +777,7 @@ show
 
 Design Code :
 ```bash
-module multiple_module_opt2(a, b, c, d, y);
-  wire _0_;
-  wire _1_;
-  wire _2_;
-  wire _3_;
-  wire _4_;
-  wire \U1.y ;
-  wire \U2.y ;
-  wire \U3.y ;
-  input a;
-  wire a;
-  input b;
-  wire b;
-  input c;
-  wire c;
-  input d;
-  wire d;
-  output y;
-  wire y;
-  assign _4_ = 1'h0;
-  assign _0_ = a;
-  assign _2_ = c;
-  assign _1_ = b;
-  assign _3_ = d;
-  assign y = _4_;
-endmodule
-multiple_module_opt2.v (END)
+
 ```
 
 Commands to Run Synthesis :
