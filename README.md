@@ -817,3 +817,125 @@ write_verilog -noattr multiple_module_opt2_netlist.v
 - Netlist (flattened) 
 
 ![Alt Text](Day3_snaps/mm_opt2_netlist_flattened.png)
+
+
+### Sequential Optimization Techniques : 
+
+Files to be used : 
+```bash
+# Open Directory 
+cd sky130RTLDesignAndSynthesisWorkshop/verilog_files 
+
+# Open dff_const directory
+ls *dff*const*
+```
+
+### D flip-flops Constant designs behaviour : 
+
+1. Dff_const1
+
+Design Code : 
+```verilog
+module dff_const1(input clk, input reset, output reg q);
+always @(posedge clk, posedge reset)
+begin
+  if(reset)
+    q <= 1'b0;
+  else
+    q <= 1'b1;
+end
+endmodule
+dff_const1.v (END)
+```
+Commands to Run the Verilog Files : 
+```bash
+# Run in iverilog 
+iverilog dff_const1.v tb_dff_const1.v
+
+# Get the vcd file 
+./a.out
+
+# See the waverform
+gtkwave tb_dff_const1.vcd
+```
+- Waveform of dff_const1
+
+![Alt Text](Day3_snaps/dff_const1.png)
+
+```
+Explanation :
+- When Reset is 0 the Q doesn't instantly change to 1 instead it waits for the positive clock edge as given in code and then it Q becomes 1.Even though this is an asynchronous reset, the output q waits for the positive clock edge because asynchronous behavior only occurs when reset goes high. When reset becomes 0, it doesn't trigger the always @(posedge clk or posedge reset) block. So, q doesn't update immediately — it waits for the next rising edge of clk, where the else condition runs and sets q to 1.
+```
+
+### Synthesis of dff_const1 
+
+Commands to follow : 
+```bash
+# Read Library 
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# Read Verilog file 
+read_verilog dff_const1.v
+
+# Do syhthesis 
+synth -top dff_const1
+
+# Mapping the dff using dfflibmap
+dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# View the design 
+show
+```
+
+Our design has active high reset that's why synthesis given us inverter before the reset pin. You can see in the image below we have _Not_ gate attached to _Reset_.
+![Alt Text](Day3_snaps/dff_const1_synthesis.png)
+
+![Alt Text](Day3_snaps/dff_const1_onedffcell.png)
+
+<h>
+
+2. Dff_const2
+
+Design Code : 
+```verilog
+
+module dff_const2(input clk, input reset, output reg q);
+always @(posedge clk, posedge reset)
+begin
+  if(reset)
+    q <= 1'b1;
+  else
+    q <= 1'b1;
+end
+endmodule
+dff_const2.v (END)
+```
+
+![Alt Text](Day3_snaps/dff_const2.png)
+
+### Synthesis of dff_const2
+
+Commands to follow : 
+```bash
+# Read Library -- If you are runnig directly after running the const1 then no need for reading library.
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# Read Verilog file 
+read_verilog dff_const2.v
+
+# Do syhthesis 
+synth -top dff_const2
+
+# Mapping the dff using dfflibmap
+dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# View the design 
+show
+```
+
+As our Q is always one, there was no need to use any flop in the design and that's why our design has no cells used from library.
+
+![Alt Text](Day3_snaps/dff_const2_synthesis.png)
+
+![Alt Text](Day3_snaps/dff_const2_nocells_present.png)
+
