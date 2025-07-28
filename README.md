@@ -890,7 +890,11 @@ show
 
 Our design has active high reset that's why synthesis given us inverter before the reset pin. You can see in the image below we have _Not_ gate attached to _Reset_.
 
+- Design after synthesis dff_const 1
+
 ![Alt Text](Day3_snaps/dff_const1_synthesis.png)
+
+- Number of flops in design 
 
 ![Alt Text](Day3_snaps/dff_const1_onedffcell.png)
 
@@ -949,7 +953,11 @@ show
 
 As our Q is always one, there was no need to use any flop in the design and that's why our design has no cells used from library.
 
+- Design after synthesis
+
 ![Alt Text](Day3_snaps/dff_const2_synthesis.png)
+
+- Number of flops in design 
 
 ![Alt Text](Day3_snaps/dff_const2_nocells_present.png)
 
@@ -995,7 +1003,7 @@ gtkwave tb_dff_const3.vcd
 
 ![Alt Text](Day3_snaps/dff_const3.png)
 
-#### Synthesis of dff_const2
+#### Synthesis of dff_const3
 
 Commands to follow : 
 ```bash
@@ -1014,10 +1022,11 @@ dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 # View the design 
 show
 ```
-
-As our Q is always one, there was no need to use any flop in the design and that's why our design has no cells used from library.
+- Synthesis Design dff_const 3
 
 ![Alt Text](Day3_snaps/dff_const3_synthesis.png)
+
+- Number of flops in the design 
 
 ![Alt Text](Day3_snaps/dff_const3_2flopcells.png)
 
