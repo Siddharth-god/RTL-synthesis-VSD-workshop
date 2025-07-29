@@ -1118,4 +1118,95 @@ dff_const5.v (END)
 
 ### Sequential Optimization for unused output
 
+1. Counter_opt.v 
 
+- Synthesis 
+
+```bash 
+# Open Directory 
+cd sky130RTLDesignAndSynthesisWorkshop/verilog_files
+
+# Invoke Yosys
+yosys
+
+# Read Library 
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# Read Verilog Code of design
+read_verilog counter_opt.v
+
+# Doing synthesis of design 
+synth -top counter_opt
+
+# Finding the D-flip-flop from library for design
+dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# 
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# View the synthesized design 
+show
+```
+
+- Number of flops getting used 
+
+![Alt Text](Day3_snaps/counter_opt_flopsused.png)
+
+- Counter 1 optimized design using only one DFF. 
+
+![Alt Text](Day3_snaps/counter_opt_synthesis_design.png)
+
+```bash
+# Open directory 
+cd sky130RTLDesignAndSynthesisWorkshop/verilog_files
+
+# Copy the code of counter_opt.v to new file named counter_opt2.v 
+cp counter_opt.v counter_opt2.v
+
+# open the new file and edit it
+gvim counter_opt2.v
+
+# Edit the file as shown in images below
+```
+- Previous code :
+
+![Alt Text](Day3_snaps/cp_counter_opt2.png)
+
+- Edited code (changes made = assign values changed / only one line changed)
+```
+To save edited content : Esc --> :w + enter = saved 
+```
+![Alt Text](Day3_snaps/edited_code_counter2.png)
+
+- Run synthesis 
+
+```bash
+# Invoke yosys in verilog_files
+yosys
+
+# Read the library 
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# Read verilog code (edited)
+read_verilog counter_opt2.v
+
+# Do synthesis on the module -- we changed file name but our module remains same. 
+synth -top counter_opt 
+
+# Map the synthesized design using actual gates from the library described as (.lib)
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# View the disign 
+show
+```
+
+- Number of flops getting used in circuit
+
+![Alt Text](Day3_snaps/edited_counter2_noofflops.png)
+
+- Unlike in previous design every flop is getting used here 
+
+![Alt Text](Day3_snaps/edited_counter_synthesisdesign.png)
+
+
+## Day 4 : 
