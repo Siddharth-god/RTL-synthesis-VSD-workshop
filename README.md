@@ -1332,7 +1332,7 @@ gtkwave tb_bad_mux.vsd
 
 - No Mismatch after GLS
 
-``` 
+
 ![Alt Text](Day4_snaps/bad_mux_gls_wf.png)
 
 3. Blocking caveat (Blocking Assignment Example) : 
