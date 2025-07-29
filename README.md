@@ -1267,3 +1267,49 @@ gtkwave tb_ternary_operator_mux.vcd
 
 ![Alt Text](Day4_snaps/glc_ternary_op_mux_wf.png)
 
+2. Bad Multiplexer
+
+Design Code : 
+
+```verilog
+module bad_mux (input i0 , input i1 , input sel , output reg y);
+always @ (sel)
+begin
+        if(sel)
+                y <= i1;
+        else 
+                y <= i0;
+end
+endmodule
+```
+
+- Simulation 
+
+Commands to follow : 
+
+```bash 
+iverilog bad_mux.v tb_bad_mux.v
+
+./a.out
+
+gtkwave tb_bad_mux.vcd
+```
+```
+- Synthesis Simulation Mismatch :
+If we see verilog code the always block has condition set as "sel" which is a problem as when select is low activities at "i0" are not 
+sensed by the always block. Now when "select" goes high "i1" gets selected but as there is no activity on select and our "i1" is changing 
+still our "output (y) is not channging and out multiplexer is acting like an "flop". And this is happening because we used "sel" as our 
+condition so unless "sel" changes no activity will happen at the output. so it is giving the behaviour like an flop. 
+```
+
+![Alt Text](Day4_snaps/bad_mux_wf.png)
+
+```
+- No Mismatch after GLS
+``` 
+![Alt Text](Day4_snaps/bad_mux_gls_wf.png)
+
+
+
+
+
