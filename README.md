@@ -1283,7 +1283,7 @@ end
 endmodule
 ```
 
-- Simulation 
+- RTL Simulation 
 
 Commands to follow : 
 
@@ -1304,12 +1304,103 @@ condition so unless "sel" changes no activity will happen at the output. so it i
 
 ![Alt Text](Day4_snaps/bad_mux_wf.png)
 
+- Synthesis 
+
+Commands to follow :
+```bash 
+read_liberty -lib ../lib/Sky30_fd_sc_hd
+
+read_verilog bad_mux.v
+
+synth -top bad_mux
+
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+write_verilog -noattr bad_mux_net.v
+
+show
 ```
+- GLS Commands :
+
+```bash
+iverilog ../my_lib/verilog_model/primitives.v ../my_lib/verilog_model/sky130_fd_sc_hd.v bad_mux_net.v tb_bad_mux.v
+
+./a.out
+
+gtkwave tb_bad_mux.vsd
+```
+
 - No Mismatch after GLS
+
 ``` 
 ![Alt Text](Day4_snaps/bad_mux_gls_wf.png)
 
+3. Blocking caveat (Blocking Assignment Example) : 
+
+```verilog
+module blocking_caveat (input a , input b , input  c, output reg d); 
+reg x;
+always @ (*)
+begin
+        d = x & c;
+        x = a | b;
+end
+endmodule
+```
+```bash
+iverilog blocking_caveat.v tb_blocking_caveat.v
+
+./a.out
+
+gtkwave tb_blocking_caveat.vcd
+```
+
+- If you see the design code above we have used _Blocking Assignments_ which means first line gets executed first and after that second. So if we think about it the _x_ in first line has the unknown value and _x_ acts as flopped value (flop used in designs to store temp values)
+
+- RTL Simulation :
+
+```
+We are getting completely opposite output. If you check in design if a & b = 1 , c = 1 it should give us d = 1 . But we're 
+Getting 0, and on every clock you can see that strange behaviour and that is happening due to "Blocking Assignment".
+```
+![Alt Text](Day4_snaps/explain_blocking_simulation.png)
+
+![Alt Text](Day4_snaps/blocking_wf.png)
 
 
+- Synthesis
 
+```bash
+read_verilog blocking_caveat.v
 
+synth -top blocking_caveat
+
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+write_verilog -noattr blocking_caveat.v
+
+show
+```
+- Logic design after Synthesis 
+
+```
+In design below you can see there's no latch connected so it's not going to look for the previous value.
+We can avoid this condition if we used "Non_blocking Assignment" but we don't want to here because we are learning the
+behaviour of "Blocking Assignment". 
+```
+![Alt Text](Day4_snaps/blocking_caveat_synthesis_design.png)
+
+- GLS Commands
+
+```bash
+iverilog ../my_lib/verilog_model/primitives.v ../my_lib/verilog_model/sky130_fd_sc_hd.v blocking_caveat_net.v tb_blocking_caveat.v
+
+./a.out
+
+gtkwave tb_blocking_caveat.vsd
+```
+- Waveform of blocking_caveat after performing GLS 
+
+You can see in the image below, we are getting perfect output - compare it with image above. 
+
+![Alt Text](Day4_snaps/blocking_gls_wf.png)
