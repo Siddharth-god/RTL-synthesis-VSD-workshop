@@ -1209,4 +1209,61 @@ show
 ![Alt Text](Day3_snaps/edited_counter_synthesisdesign.png)
 
 
-## Day 4 : 
+## Day 4 : GLS, Blocking and Non-BLocking, Synthesis Simulation Mismatch
+
+### GLS Synth Sim Mismatch
+
+1. Ternary operator Multiplexer.(ternary_operator_mux.v)
+
+```bash
+# Run the Simulation
+iverilog ternary_operator_mux.v tb_ternary_operator_mux.v
+
+# Get the Dumped vcd file
+./a.out
+
+# Get the waveform 
+gtkwave 
+```
+- Waveform 
+
+![Alt Text](Day4_snaps/ternary_mux1_wf.png)
+
+- Synthesis 
+
+```bash
+read_liberty -lib ../lib/
+
+read_verilog ternary_operator_mux.v
+
+synth -top ternary_operator_mux
+
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+write_verilog -noattr ternary_operator_mux.v
+
+show
+```
+
+- Design Image after synthesis (without GLC)
+
+![Alt Text](Day4_snaps/ternary_mux_synthesis.png)
+
+- Performing GLC 
+
+Commands to follow : 
+
+```bash
+# Run the simulation using GLC
+iverilog ../my_lib/verilog_model/primitives.v ../my_lib/verilog_model/sky130_fd_sc_hd.v ternary_operator_mux_net.v tb_ternary_operator_mux.v
+
+# Get the vcd file
+./a.out
+
+# get the waveform
+gtkwave tb_ternary_operator_mux.vcd
+```
+- GLS Output Waveform
+
+![Alt Text](Day4_snaps/glc_ternary_op_mux_wf.png)
+
