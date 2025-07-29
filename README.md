@@ -1361,7 +1361,7 @@ gtkwave tb_blocking_caveat.vcd
 
 ```
 We are getting completely opposite output. If you check in design if a & b = 1 , c = 1 it should give us d = 1 . But we're 
-Getting 0, and on every clock you can see that strange behaviour and that is happening due to "Blocking Assignment".
+Getting 0, and on every clock you can see that strange behaviour and that is happening due to "Blocking Assignment" our simulator is looking at the previous value of "a" which is 1 and that's why we get such strange behaviour.
 ```
 ![Alt Text](Day4_snaps/explain_blocking_simulation.png)
 
