@@ -1422,6 +1422,8 @@ gvim *incomp* -o
 
 ![Alt Text](Day5_snaps/incomp_all_files.png)
 
+--- 
+
 ### Incomplete Statements
 
 #### If's
@@ -1502,7 +1504,7 @@ endmodule
 
 ![Alt Text](Day5_snaps/inc_if2_code_explain.png)
 
-- __Running Simulation__ 
+- Running Simulation
 
 - Waveform Explaination : 
 ```
@@ -1518,7 +1520,7 @@ You can see the waveform below : Both conditions are there.
 
 ![Alt Text](Day5_snaps/incomp_if2_sec_cond.png)
 
-- __Running Synthesis__
+- Running Synthesis
 
 ```
 "To understand the design" remember this that when input goes to D in D-Latch means it's not latching 
@@ -1528,6 +1530,8 @@ in the end and taking inputs from both the Multiplexers.
 ![Alt Text](Day5_snaps/getting_latch_if2.png)
 
 ![Alt Text](Day5_snaps/design_after-synthesis.png)
+
+---
 
 #### Cases 
 
@@ -1556,6 +1560,7 @@ endmodule
 
 ![Alt Text](Day5_snaps/design_after_synthesis.png)
 
+
 2. __Comp case__ 
 
 ```verilog
@@ -1570,6 +1575,10 @@ begin
 end
 endmodule
 ```
+Code Explained : 
+
+![Alt Text](Day5_snaps/comp_case.png)
+
 - Running Simulation 
 
 ```
@@ -1584,6 +1593,154 @@ We are getting perfect output using default. The 10 and 11 select lines are givi
 Logic design 
 
 ![Alt Text](Day5_snaps/design_compcase_synthesis.png)
+
+
+3. __Partial Case__ 
+
+Verilog Code : 
+
+```verilog 
+module partial_case_assign (input i0 , input i1 , input i2 , input [1:0] sel, output reg y , output reg x);
+always @ (*)
+begin
+        case(sel)
+                2'b00 : begin
+                        y = i0;
+                        x = i2;
+                        end
+                2'b01 : y = i1;  // x value is not given here. Therefore this value will create latch.
+                default : begin
+                           x = i1;
+                           y = i2;
+                          end
+        endcase
+end
+endmodule
+```
+
+```
+🔹 What is a Latch in RTL?
+A latch is a level-sensitive storage element.
+
+Unlike flip-flops, which are edge-triggered, latches are transparent (i.e., they pass input to output) when the enable signal is active.
+
+🔹 What does Latch Enabled mean?
+It means:
+
+The latch is currently transparent (i.e., passing the input to output) because the enable signal is active.
+
+When enable = 1, the latch is open — input flows through to output.
+
+When enable = 0, the latch holds (i.e., it keeps its last value).
+
+🧠 So is it like:
+“When there is enable, there is no latch (i.e., data passes through), and when enable is off, it behaves like memory”?
+
+✅ Yes — exactly!
+
+That's what we mean when we say "latch is enabled" — it means it's not latching (yet), it's letting data through.
+```
+
+- Running Synthesis 
+
+Code Explained : 
+
+![Alt Text](Day5_snaps/partial_case.png)
+
+Cell Information :
+
+![Alt Text](Day5_snaps/partial_case_latchpresent.png)
+
+Design after Synthesis : 
+
+![Alt Text](Day5_snaps/design_partialcase_synthesis.png)
+
+
+4. __Bad Case__ 
+
+Verilog Code :
+
+```verilog
+module bad_case (input i0 , input i1, input i2, input i3 , input [1:0] sel, output reg y);
+always @(*)
+begin
+        case(sel)
+                2'b00: y = i0;
+                2'b01: y = i1;
+                2'b10: y = i2;
+                2'b1?: y = i3;  // Here, ? --> can be either 1 or 0. which confuses simulator and creates overlapping.
+                //2'b11: y = i3;
+        endcase
+end
+
+endmodule
+```
+
+- Running Simulation 
+
+```bash
+iverilog bad_case.v tb_bad_case.v
+
+./a.out
+
+gtkwave tb_bad_case.vsd
+```
+
+```
+If you see in the waveform below our simulator is getting confused due to (? - Unknown) value and instead of 1 it picks 0,
+which causes overlapping and our output latches to it's previous value. Synthesiser on the other hand will pick 1 because
+it takes revelant values so it sees if I have 10 then next value should be 11. 
+Which causes Synthesis Simulation Mismatch. 
+```
+
+![Alt Text](Day5_snaps/bad_case_wf.png)
+
+- Running Synthesis 
+
+Commands to follow : 
+```bash
+# Read the library 
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# Read verilog code (edited)
+read_verilog counter_opt2.v
+
+# Do synthesis on the module -- we changed file name but our module remains same. 
+synth -top counter_opt 
+
+# Map the synthesized design using actual gates from the library described as (.lib)
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# View the disign 
+show
+
+# Write New file to Run GLS 
+write_verilog -noattr bad_case_net.v
+```
+
+```
+We saw the output was latching while simulation, but in synthesis there is no latch.
+```
+![Alt Text](Day5_snaps/no_latch_present_insynthesis.png)
+
+- Design after Synthesis
+
+![Alt Text](Day5_snaps/design_bad_case_synthesis.png)
+
+ write_verilog -noattr bad_case_net.v
+
+- Running GLS 
+
+```bash
+iverilog ../my_lib/verilog_model/primitives.v ../my_lib/verilog_model/sky130_fd_sc_hd.v bad_case_net.v tb_bad_case.v
+
+./a.out
+
+gtkwave tb_bad_case.vsd
+```
+![Alt Text](Day5_snaps/gls_perfected_wf.png)
+
+--- 
 
 
 
