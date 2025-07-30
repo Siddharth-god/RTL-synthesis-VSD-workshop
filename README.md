@@ -1404,3 +1404,186 @@ gtkwave tb_blocking_caveat.vsd
 You can see in the image below, we are getting perfect output - compare it with image above. 
 
 ![Alt Text](Day4_snaps/blocking_gls_wf.png)
+
+
+## Day 5 : Optimization in Synthesis
+
+```bash
+# Open the directory
+cd sky130RTLDesignAndSynthesisWorkshop/verilog_files
+
+# To see all the Incomplete files 
+ls *incomp*
+
+# To see all the design codes at once 
+gvim *incomp* -o
+```
+- All files 
+
+![Alt Text](Day5_snaps/incomp_all_files.png)
+
+### Incomplete Statements
+
+#### If's
+
+1. __Incomplete if__
+
+Design code : 
+```verilog 
+module incomp_if (input i0 , input i1 , input i2 , output reg y);
+always @ (*)
+begin
+        if(i0)
+                y <= i1;
+end
+endmodule
+```
+
+![Alt Text](Day5_snaps/incomp_if_asdlatch.png)
+
+- Running Simulation 
+
+```bash
+iverilog incomp_if.v tb_incomp_if.v 
+
+./a.out
+
+gtkwave tb_incomp_if.vcd
+```
+- Waveform incomp if
+
+``` Our code says if i0 is high our y becomes i1, and when i0 is low y = i1 but in waveform our y behaves like i0 when i0 is low and thats because,
+When our i0 gets low our y gets latches on to it's last y output and continues it until i0 becomes high again and acts like D-latch and we get this waveform.
+```
+![Alt Text](Day5_snaps/incomp_if_simulation_wf.png)
+
+- Running Synthesis
+
+```bash
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+read_verilog incomp_if.v
+
+synth -top incomp_if
+
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+show
+```
+
+- If you see in the image below we are getting the latch instead of Mux. That shows us our waveform behaviour was Latch.
+
+![Alt Text](Day5_snaps/D_latch_insteadofmux.png)
+
+- We get inferred latch after running synthesis
+
+![Alt Text](Day5_snaps/synthesis_inferred_latch.png)
+
+2. __Incomplete if 2__
+
+```
+Commands will be same - only file name will change.
+```
+
+Verilog Design Code : 
+
+```verilog
+module incomp_if2 (input i0 , input i1 , input i2 , input i3, output reg y);
+always @ (*)
+begin
+        if(i0)  // If i0 is high : y = i1 & when i0 is low : next condition
+                y <= i1;
+        else if (i2)  // If i2 is high : y = i3 & when i2 is low : next <con> But as we don't have it latches to previous output. 
+                y <= i3;
+end
+endmodule
+```
+- Code Explaination for incomplete if 2
+
+![Alt Text](Day5_snaps/inc_if2_code_explain.png)
+
+- __Running Simulation__ 
+
+- Waveform Explaination : 
+```
+When i0 = 1, Y = i1. When i0 = 0, Next conditon :
+When i2 = 1, Y = i3. When i2 = 0, Y latches to it's previous output.
+You can see the waveform below : Both conditions are there.
+```
+- Condition 1 : i0
+
+![Alt Text](Day5_snaps/incomp_if2_wf.png)
+
+- Condition 2 : i2
+
+![Alt Text](Day5_snaps/incomp_if2_sec_cond.png)
+
+- __Running Synthesis__
+
+```
+"To understand the design" remember this that when input goes to D in D-Latch means it's not latching 
+And when it goes to Enable(E) pin means it latches. You might get confused by seeing D-latch present
+in the end and taking inputs from both the Multiplexers. 
+```
+![Alt Text](Day5_snaps/getting_latch_if2.png)
+
+![Alt Text](Day5_snaps/design_after-synthesis.png)
+
+#### Cases 
+
+1. __Incomplete case__
+
+```verilog
+module incomp_case (input i0 , input i1 , input i2 , input [1:0] sel, output reg y);
+always @ (*)
+begin
+        case(sel)
+                2'b00 : y = i0;
+                2'b01 : y = i1;
+        endcase
+end
+endmodule
+```
+- Explanation 
+
+![Alt Text](Day5_snaps/incomp_case_explain.png)
+
+- Running simulation
+
+![Alt Text](Day5_snaps/incomp_case_wf.png)
+
+- Running Synthesis
+
+![Alt Text](Day5_snaps/design_after_synthesis.png)
+
+2. __Comp case__ 
+
+```verilog
+module comp_case (input i0 , input i1 , input i2 , input [1:0] sel, output reg y);
+always @ (*)
+begin
+        case(sel)
+                2'b00 : y = i0;
+                2'b01 : y = i1;
+                default : y = i2; // We have default present here means if no condition is given then this is default value for y : No latch will be present in this design. 
+        endcase
+end
+endmodule
+```
+- Running Simulation 
+
+```
+We are getting perfect output using default. The 10 and 11 select lines are giving i2 as output. 
+```
+![Alt Text](Day5_snaps/comp_case_wf.png)
+
+- Running Synthesis
+
+![Alt Text](Day5_snaps/no_latch_comp_case.png)
+
+Logic design 
+
+![Alt Text](Day5_snaps/design_compcase_synthesis.png)
+
+
+
