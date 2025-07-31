@@ -1936,7 +1936,7 @@ gtkwave tb_rca.vsd
 ```
 - rca Waveform :
 
-![Alt Text](Day5_snaps/rca.wf.png)
+![Alt Text](Day5_snaps/rca_wf.png)
 
 - Running Synthesis 
 
