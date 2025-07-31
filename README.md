@@ -1940,6 +1940,32 @@ gtkwave tb_rca.vsd
 
 - Running Synthesis 
 
+```bash
+yosys
+
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+read_verilog fa.v rca.v
+
+synth -top rca
+
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+show rca
+
+show fa
+
+write_verilog -noattr rca_net.v 
+```
+- Ripple carry adder : 
+
+![Alt Text](Day5_snaps/rca_design_synthesis.png)
+
+- Full adder :
+
+![Alt Text](Day5_snaps/full_adder_synthesis.png)
+
+
 
 -------------------------------------------------x THE END x---------------------------------------------------------
 
