@@ -1742,5 +1742,157 @@ gtkwave tb_bad_case.vsd
 
 --- 
 
+### For and Generate : 
+
+- _For_ loop is always used inside _always block_ and we use for to _evaluating the expressions_. 
+- _Generate_ is used outside of _always block_ every time and we use this for _instantiating_ the hardware such as OR, AND, NAND gates.  
+
+### Using For :
+
+1. #### Mux : Generating Mux using Normal _for loop_ :
+
+```verilog
+module mux_generate (input i0 , input i1, input i2 , input i3 , input [1:0] sel  , output reg y);
+wire [3:0] i_int;
+assign i_int = {i3,i2,i1,i0};
+integer k;
+always @ (*)
+begin
+for(k = 0; k < 4; k=k+1) begin
+        if(k == sel)
+                y = i_int[k];
+end
+end
+endmodule
+```
+
+- Running Simulation : 
+
+Commands to follow : 
+
+```bash 
+iverilog mux_generate.v tb_mux_generate.v
+
+./a.out
+
+gtkwave tb_mux_generate.vcd
+```
+- Waveform for mux_generate.v 
+
+![Alt Text](Day5_snaps/mux_wf.png)
 
 
+- Running Synthesis : 
+
+Commands to follow : 
+```bash 
+# Invoke yosys in verilog files 
+yosys
+
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+read_verilog mux_generate.v 
+
+synth -top mux_generate
+
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+show
+```
+- Design after synthesis : 
+
+![Alt Text](Day5_snaps/design_mux_genereate_synthesis.png)
+
+
+2. #### D-Mux : Generating D-Mux using normal _for loop_
+
+- Code comparision using _case_ and _for loop_ 
+
+![Alt Text](Day5_snaps/dmux_using_case&for.png)
+
+
+- Using _case_ 
+```
+When we use case the code is easier to understand but 
+the problem is that when the design gets larger in size
+let's say - 256 : 1 Mux then we would have to write 
+270 lines of code. 
+While using for that code becomes little complicated 
+but once we write the code then that code even works for 
+larger designs such as 256 : 1 Mux or Dmux. 
+```
+
+- Running Simulation 
+
+- __For case__
+
+Commands to follow : 
+
+```bash
+iverilog demux_case.v tb_demux_case.v
+
+./a.out
+
+gtkwave tb_demux_case.vcd
+```
+- Design Waveform 
+
+![Alt Text](Day5_snaps/case_wf.png)
+
+- __For for__
+
+Commands to follow : 
+
+```bash
+iverilog demux_generate.v tb_demux_generate.v
+
+./a.out
+
+gtkwave tb_demux_generate.vcd
+```
+![Alt Text](Day5_snaps/demux_generate_wf.png)
+
+
+- Running Synthesis 
+
+- __For Case__ 
+
+Commands to follow : 
+
+```bash 
+# Invoke yosys in verilog files 
+yosys
+
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+read_verilog mux_generate.v 
+
+synth -top mux_generate
+
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+show
+```
+
+![Alt Text](Day5_snaps/synthesis_case.png)
+
+- __For for__ 
+
+Commands to follow : 
+
+```bash 
+# Invoke yosys in verilog files 
+yosys
+
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+read_verilog mux_generate.v 
+
+synth -top mux_generate
+
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+show
+```
+
+![Alt Text](Day5_snaps/synthesis_for.png)
