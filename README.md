@@ -1965,6 +1965,21 @@ write_verilog -noattr rca_net.v
 
 ![Alt Text](Day5_snaps/full_adder_synthesis.png)
 
+- Running GLS
+
+Commands to follow : 
+
+```bash
+iverilog ../my_lib/verilog_model/primitives.v ../my_lib/verilog_model/sky130_fd_sc_hd.v rca_net.v tb_rca.v
+
+./a.out
+
+gtkwave tb_rca.vcd
+```
+- Waveform after GLS
+
+![Alt Text](Day5_snaps/gls_rca_wf.png)
+
 
 
 -------------------------------------------------x THE END x---------------------------------------------------------
