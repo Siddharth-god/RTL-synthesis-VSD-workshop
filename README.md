@@ -1811,7 +1811,7 @@ show
 ![Alt Text](Day5_snaps/dmux_using_case&for.png)
 
 
-- Using _case_ 
+- Using _case_ & _for_ : The output will be the same for both, just method is different. 
 ```
 When we use case the code is easier to understand but 
 the problem is that when the design gets larger in size
@@ -1896,3 +1896,9 @@ show
 ```
 
 ![Alt Text](Day5_snaps/synthesis_for.png)
+
+--- 
+
+### Using Generate : 
+
+1. 
